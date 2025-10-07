@@ -8,7 +8,7 @@ def download_file (url: str, dir_path: str, local_path: str):
     """ 
     Downloads a file from a given URL to the local path
     """
-    os.makedirs(os.path.dirname(dir_path), exist_ok= True)
+   os.makedirs(dir_path, exist_ok=True)
 
     print ('folder is created')
 
