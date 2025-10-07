@@ -1,14 +1,29 @@
 # Databricks notebook source
 #import functions and relativedelta for date calculations
+
+import sys
+import os
+
+# Go two levels up to reach the project root
+project_root = os.path.abspath(os.path.join(os.getcwd(), "../.."))
+
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+
+
 from dateutil.relativedelta import relativedelta
 from pyspark.sql.functions import current_timestamp, col,right
 from datetime import date
 
+from modules.transformations.metadata import add_file_name, add_processed_timestamp
+from modules.utils.date_utils import get_target_yyyymm
+
 # COMMAND ----------
 
 #obtain the YYYY-MM for 2 months prior to the current month in YYYY-MM format
-two_months_ago = date.today() - relativedelta(months=2)
-formatted_date = two_months_ago.strftime("%Y-%m")
+
+formatted_date = get_target_yyyymm(2)
 
 # COMMAND ----------
 
@@ -18,9 +33,9 @@ taxi_df = spark.read.format("parquet").load(f"/Volumes/nyctaxi/00_landing/data_s
 # COMMAND ----------
 
 #add extra columns - processed_timestamp and file_name
-from pyspark.sql.functions import current_timestamp, col, right
-taxi_df = taxi_df.withColumn("processed_timestamp", current_timestamp()).withColumn("file_name", col("_metadata.file_name"))
 
+taxi_df = add_processed_timestamp(taxi_df)
+taxi_df = add_file_name(taxi_df)
 
 # COMMAND ----------
 
