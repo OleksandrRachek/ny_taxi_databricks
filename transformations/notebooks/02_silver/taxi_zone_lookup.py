@@ -22,24 +22,6 @@ df = df.select(
                 col("_metadata.file_name").alias("file_name")
             )
 
-# COMMAND ----------
-
-# This logic has been included to force updates and insertions to the source taxi zone lookup data for demonstration purposes only
-# THIS SHOULD NOT BE INCLUDED IN THE FINAL PROJECT CODE
-
-from pyspark.sql.functions import *
-
-# Insert new record to the source DataFrame
-df_new = spark.createDataFrame(
-    [(996, "New Borough", "New Zone", "New Service Zone")],
-    schema="location_id int, borough string, zone string, service_zone string"
-).withColumn("effective_date", current_timestamp()) \
- .withColumn("end_date", lit(None).cast("timestamp")).withColumn("file_name", lit("none"))
-
-df = df_new.union(df)
-
-# Updating record for location_id 1
-df = df.withColumn("borough", when(col("location_id")==1, "Unknown").otherwise(col("borough")))
 
 # COMMAND ----------
 
