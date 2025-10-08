@@ -12,7 +12,7 @@ def get_target_yyyymm(months_ago=2):
 
 
 
-def month_start_n_months_ago(months_ago: int = 2) -> date:
+def get_month_start_n_months_ago(months_ago: int = 2) -> date:
     """Returns the date representing the 1st day of the month n months ago
     Params: months_ago, Number of months back from today
 
