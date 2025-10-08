@@ -77,7 +77,7 @@ yellow_trips_df = yellow_trips_df.select(
       col("Airport_fee").alias("airport_fee"),
       "cbd_congestion_fee",
       "processed_timestamp",
-      "file_name")
+      "source_file_name")
 
 # COMMAND ----------
 
