@@ -28,17 +28,17 @@ formatted_date = get_target_yyyymm(2)
 # COMMAND ----------
 
 #read parquet file for the particular month from the landing directory to DF
-taxi_df = spark.read.format("parquet").load(f"/Volumes/nyctaxi/00_landing/data_sources/nytaxi_yellow/{formatted_date}")
+taxi_df = spark.read.format("parquet").load(f"/Volumes/nyctaxi/00_landing/data_sources/nytaxi_fhv/{formatted_date}")
 
 # COMMAND ----------
 
 #add extra columns - processed_timestamp and file_name
 
-taxi_df = taxi_df.withColumn("taxi_type", lit("yellow taxi"))
+taxi_df = taxi_df.withColumn("taxi_type", lit("for-hire vehicle"))
 taxi_df = add_processed_timestamp(taxi_df)
 taxi_df = add_file_name(taxi_df)
 
 # COMMAND ----------
 
 #write to the table yellow_trips_raw -- APPEND MODE
-taxi_df.write.mode("append").saveAsTable("nyctaxi.01_bronze.yellow_trips_raw")
+taxi_df.write.mode("append").saveAsTable("nyctaxi.01_bronze.fhv_trips_raw")

@@ -1,30 +1,30 @@
 # Databricks notebook source
 from pyspark.sql.functions import col, when, timestamp_diff, lit
+from pyspark.sql.types import DoubleType
 
 
 # COMMAND ----------
 
-yellow_trips_df = spark.read.table("nyctaxi.01_bronze.yellow_trips_raw")
+green_trips_df = spark.read.table("nyctaxi.01_bronze.green_trips_raw")
 
 # COMMAND ----------
 
-yellow_trips_df=yellow_trips_df.filter("tpep_pickup_datetime >= '2024-12-01' and tpep_pickup_datetime <= '2025-07-31'")
+green_trips_df=green_trips_df.filter("lpep_pickup_datetime >= '2024-12-01' and lpep_pickup_datetime <= '2025-07-31'")
 
 
 # COMMAND ----------
 
-yellow_trips_df = yellow_trips_df.select(
+green_trips_df = green_trips_df.select(
     #Map VendorID into Vendor names
     when (col("VendorID") == 1, 'Creative Mobile Technologies, LLC')
       .when (col("VendorID") == 2, 'Curb Mobility, LLC')
       .when(col("VendorID") == 6, 'Myle Technologies Inc')
-      .when(col("VendorID") == 7, 'Helix')
       .otherwise('Unknown').alias("vendor"),
     
-    col("tpep_pickup_datetime").alias("pickup_datetime"),
-    col("tpep_dropoff_datetime").alias("dropoff_datetime"),
+    col("lpep_pickup_datetime").alias("pickup_datetime"),
+    col("lpep_dropoff_datetime").alias("dropoff_datetime"),
     #calculate trip duration in minutes
-    timestamp_diff('MINUTE', col("tpep_pickup_datetime"), col("tpep_dropoff_datetime")).alias("trip_duration"),
+    timestamp_diff('MINUTE', col("lpep_pickup_datetime"), col("lpep_dropoff_datetime")).alias("trip_duration"),
     "passenger_count",
     "trip_distance",
     #decode rate codes into readable rate types
@@ -56,16 +56,18 @@ yellow_trips_df = yellow_trips_df.select(
       "total_amount",
       "congestion_surcharge",
       #alias for columns
-      col("Airport_fee").alias("airport_fee"),
+      lit(None).cast(DoubleType()).alias("airport_fee"),
       "cbd_congestion_fee",
-      lit('Unknown').alias("trip_type"),
+      when(col("trip_type") == 1, 'Street-hall')
+        .when(col("trip_type") == 2, 'Dispatch')
+        .otherwise('Unknown').alias("trip_type"),
       "taxi_type",
       "processed_timestamp",
       "source_file_name")
 
 # COMMAND ----------
 
-yellow_trips_df.write.mode("overwrite").saveAsTable("nyctaxi.02_silver.yellow_trips_cleansed")
+green_trips_df.write.mode("overwrite").saveAsTable("nyctaxi.02_silver.green_trips_cleansed")
 
 # COMMAND ----------
 
