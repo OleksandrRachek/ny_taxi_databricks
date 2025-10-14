@@ -8,7 +8,7 @@ lookup_df = spark.read.csv('/Volumes/nyctaxi/00_landing/data_sources/lookup/taxi
 
 # COMMAND ----------
 
-lookup_df = lookup_df.withColumn("processed_timestamp", current_timestamp()).withColumn("file_name", col("_metadata.file_name"))
+lookup_df = lookup_df.withColumn("processed_timestamp", current_timestamp()).withColumn("source_file_name", col("_metadata.file_name"))
 
 # COMMAND ----------
 
@@ -18,13 +18,9 @@ lookup_df = lookup_df.select(
     col("Zone").alias("zone"),
     col("service_zone").alias("service_zone"),
     col("processed_timestamp").alias("effective_date"),
-    col("file_name"),
+    col("source_file_name"),
     lit(None).cast(TimestampType()).alias("end_date")
 )
-
-# COMMAND ----------
-
-lookup_df.display()
 
 # COMMAND ----------
 

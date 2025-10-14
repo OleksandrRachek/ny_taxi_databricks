@@ -1,15 +1,33 @@
 # Databricks notebook source
+import sys
+import os
+# Go two levels up to reach the project root
+project_root = os.path.abspath(os.path.join(os.getcwd(), "../.."))
+
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+
 from pyspark.sql.functions import col, when, timestamp_diff, lit
-
-
-# COMMAND ----------
-
-yellow_trips_df = spark.read.table("nyctaxi.01_bronze.yellow_trips_raw")
+from datetime import date
+from dateutil.relativedelta import relativedelta
+from modules.utils.date_utils import get_month_start_n_months_ago
 
 # COMMAND ----------
 
-yellow_trips_df=yellow_trips_df.filter("tpep_pickup_datetime >= '2024-12-01' and tpep_pickup_datetime <= '2025-07-31'")
+# Get the first day of the month two months ago
+two_months_ago_start = get_month_start_n_months_ago(2)
 
+# Get the first day of the month one month ago
+one_month_ago_start = get_month_start_n_months_ago(1)
+
+# COMMAND ----------
+
+# Read the 'yellow_trips_raw' table from the 'nyctaxi.01_bronze' schema
+# Then filter rows where 'tpep_pickup_datetime' is >= two months ago start
+# and < one month ago start (i.e., only the month that is two months before today)
+
+yellow_trips_df = spark.read.table("nyctaxi.01_bronze.yellow_trips_raw").filter(f"tpep_pickup_datetime >= '{two_months_ago_start}' AND tpep_pickup_datetime < '{one_month_ago_start}'")
 
 # COMMAND ----------
 
@@ -65,7 +83,7 @@ yellow_trips_df = yellow_trips_df.select(
 
 # COMMAND ----------
 
-yellow_trips_df.write.mode("overwrite").saveAsTable("nyctaxi.02_silver.yellow_trips_cleansed")
+yellow_trips_df.write.mode("append").saveAsTable("nyctaxi.02_silver.yellow_trips_cleansed")
 
 # COMMAND ----------
 

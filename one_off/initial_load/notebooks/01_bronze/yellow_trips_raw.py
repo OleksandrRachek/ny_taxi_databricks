@@ -1,5 +1,5 @@
 # Databricks notebook source
-from pyspark.sql.functions import current_timestamp, col,right
+from pyspark.sql.functions import current_timestamp, col,right, lit
 
 
 # COMMAND ----------
@@ -9,7 +9,7 @@ taxi_df = spark.read.format("parquet").load("/Volumes/nyctaxi/00_landing/data_so
 # COMMAND ----------
 
 from pyspark.sql.functions import current_timestamp, col, right
-taxi_df = taxi_df.withColumn("processed_timestamp", current_timestamp()).withColumn("file_name", col("_metadata.file_name"))
+taxi_df = taxi_df.withColumn("taxi_type", lit("yellow taxi")).withColumn("processed_timestamp", current_timestamp()).withColumn("source_file_name", col("_metadata.file_name"))
 
 
 # COMMAND ----------
