@@ -13,7 +13,7 @@ if project_root not in sys.path:
 
 
 from dateutil.relativedelta import relativedelta
-from pyspark.sql.functions import current_timestamp, col,right
+from pyspark.sql.functions import current_timestamp, col,right, lit 
 from datetime import date
 
 from modules.transformations.metadata import add_file_name, add_processed_timestamp
