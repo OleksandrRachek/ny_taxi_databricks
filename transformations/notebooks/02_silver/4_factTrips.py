@@ -93,4 +93,4 @@ df_union = df_union.fillna(mean_dict)
 
 # COMMAND ----------
 
-df.write.mode("append").saveAsTable("nyctaxi.02_silver._factTrips")
+df_union.write.mode("append").saveAsTable("nyctaxi.02_silver._factTrips")
