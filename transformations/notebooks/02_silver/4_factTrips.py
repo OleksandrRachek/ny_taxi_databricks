@@ -39,7 +39,9 @@ df_green_yellow = (
         df_green_yellow.trip_distance,
         df_green_yellow.fare_amount,
         df_green_yellow.total_amount,
-        df_green_yellow.taxi_type)
+        df_green_yellow.taxi_type
+    )
+)
     
 
 # COMMAND ----------
