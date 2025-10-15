@@ -32,7 +32,7 @@ df_trips = spark.read.table("nyctaxi.02_silver._factTrips").filter(f"pickup_date
 df_trips = (
     df_trips.
         # group records by calendar date
-        groupBy(date_format("pickup_datetime", "yyyy-MM").alias("year_month"), hour(df_union.pickup_datetime).alias("pickup_hour"), df_union.do_zone ). 
+        groupBy(date_format("pickup_datetime", "yyyy-MM").alias("year_month"), hour(df_trips.pickup_datetime).alias("pickup_hour"), df_trips.do_zone ). 
         agg(
             count("*").alias("total_trips"),                             # total number of trips per day
             round(avg("passenger_count"), 1).alias("average_passengers"), # average passengers per trip
