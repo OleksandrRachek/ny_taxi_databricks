@@ -21,7 +21,7 @@ two_months_ago_start = get_month_start_n_months_ago(2)
 
 # Load the enriched trip dataset 
 # and filter to only include trips with a pickup datetime later than the start date from two months ago
-df = spark.read.table("nyctaxi.02_silver.yellow_trips_enriched").filter(f"tpep_pickup_datetime > '{two_months_ago_start}'")
+df = spark.read.table("nyctaxi.02_silver.green_and_yellow_trips_enriched").filter(f"pickup_datetime > '{two_months_ago_start}'")
 
 # COMMAND ----------
 
