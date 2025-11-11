@@ -2,6 +2,9 @@
 The project contains Databricks notedooks with transformations for NYC Taxi dataset 
 
 There are few items that you need to make for run the project:
+
+
+
 1 run ny_taxi_databricks/one_off/creating_catalogs_schemas_volume.py script
 
 
