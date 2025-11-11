@@ -1,5 +1,5 @@
 # databricks_project
-The project contains Databricks notedooks with transformations for NYC Taxi dataset 
+The project contains Databricks notedooks with transformations for NYC Taxi dataset. This was build based on https://www.udemy.com/course/azure-databricks-and-spark-sql-python materials with adding 3 taxi types to yellow trips dataset 
 
 There are few items that you need to make for run the project:
 
