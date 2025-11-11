@@ -1,5 +1,5 @@
 # Databricks notebook source
-spark.sql("create catalog if not exists nyctaxi managed location 's3://databricks-pyspark-or/nytaxi/'")
+spark.sql("create catalog if not exists nyctaxi managed location 's3://<your-s3-bucket>/nytaxi/'")
 
 # COMMAND ----------
 
